@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hotel Najah Hurahman</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <style>
+    body {
+      background: #f5f7fb;
+      color: #1f2937;
+      font-family: Arial, sans-serif;
+    }
+    .navbar {
+      background: linear-gradient(90deg, #0d6efd, #0b5ed7);
+      color: white;
+    }
+    .card {
+      border: none;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+      border-radius: 12px;
+    }
+    .summary-card {
+      background: linear-gradient(135deg, #ffffff, #eef5ff);
+    }
+    .section-title {
+      font-weight: 700;
+      margin-top: 20px;
+      margin-bottom: 15px;
+      color: #1e3a5f;
+    }
+    .table thead th {
+      background: #eaf2ff;
+      color: #183153;
+      font-size: 0.9rem;
+    }
+    .badge-custom {
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+    .status-paid {
+      background: #d1fae5;
+      color: #065f46;
+    }
+    .status-unpaid {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+    .status-available {
+      background: #dcfce7;
+      color: #166534;
+    }
+    .status-booked {
+      background: #fef3c7;
+      color: #92400e;
+    }
+    .status-maintenance {
+      background: #e5e7eb;
+      color: #374151;
+    }
+    .form-label {
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+    .btn-primary {
+      background: #0d6efd;
+      border: none;
+    }
+    .btn-primary:hover {
+      background: #0b5ed7;
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="navbar navbar-expand-lg">
+    <div class="container">
+      <a class="navbar-brand text-white fw-bold" href="#">Hotel Najah Hurahman</a>
+    </div>
+  </nav>
+
+  <div class="container py-4">
+    <div class="row g-3 mb-4">
+      <div class="col-md-3">
+        <div class="card summary-card p-3">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <div class="text-muted small">Booking</div>
+              <h4 id="totalBooking" class="mb-0">0</h4>
+            </div>
+            <div class="bg-primary bg-opacity-10 text-primary rounded p-2">
+              <strong>📅</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-3">
+        <div class="card summary-card p-3">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <div class="text-muted small">Kamar</div>
+              <h4 id="totalRoom" class="mb-0">0</h4>
+            </div>
+            <div class="bg-success bg-opacity-10 text-success rounded p-2">
+              <strong>🛏️</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-3">
+        <div class="card summary-card p-3">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <div class="text-muted small">Tamu</div>
+              <h4 id="totalGuest" class="mb-0">0</h4>
+            </div>
+            <div class="bg-warning bg-opacity-10 text-warning rounded p-2">
+              <strong>👥</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-3">
+        <div class="card summary-card p-3">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <div class="text-muted small">Feedback</div>
+              <h4 id="totalFeedback" class="mb-0">0</h4>
+            </div>
+            <div class="bg-info bg-opacity-10 text-info rounded p-2">
+              <strong>💬</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-title">1. Data Booking</div>
+    <div class="card p-3 mb-4">
+      <form id="bookingForm">
+        <div class="row g-3">
+          <div class="col-md-3">
+            <label class="form-label">Nama Pelanggan</label>
+            <input type="text" class="form-control" name="nama_pelanggan" required />
+          </div>
+          <div class="col-md-2">
+            <label class="form-label">Layanan</label>
+            <input type="text" class="form-control" name="layanan" required />
+          </div>
+          <div class="col-md-2">
+            <label class="form-label">Tanggal Booking</label>
+            <input type="date" class="form-control" name="tanggal_booking" required />
+          </div>
+          <div class="col-md-2">
+            <label class="form-label">Jumlah Tamu</label>
+            <input type="number" class="form-control" name="jumlah_tamu" min="1" value="1" required />
+          </div>
+          <div class="col-md-2">
+            <label class="form-label">Status</label>
+            <select class="form-select" name="status_pembayaran">
+              <option value="Belum Terbayar">Belum Terbayar</option>
+              <option value="Sudah Terbayar">Sudah Terbayar</option>
+            </select>
+          </div>
+          <div class="col-md-1 d-flex align-items-end">
+            <button class="btn btn-primary w-100" type="submit">Simpan</button>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <div class="card p-3 mb-5">
+      <div class="table-responsive">
+        <table class="table table-hover align-middle">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nama Pelanggan</th>
+              <th>Layanan</th>
+              <th>Tanggal</th>
+              <th>Jumlah Tamu</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="bookingTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="section-title">2. Data Kamar</div>
+    <div class="card p-3 mb-4">
+      <form id="roomForm">
+        <div class="row g-3">
+          <div class="col-md-3">
+            <label class="form-label">Nomor Kamar</label>
+            <input type="text" class="form-control" name="room_number" required />
+          </div>
+          <div class="col-md-2">
+            <label class="form-label">Lantai</label>
+            <input type="number" class="form-control" name="lantai" min="1" required />
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">Tipe Kamar</label>
+            <input type="text" class="form-control" name="room_type" value="Standard" required />
+          </div>
+          <div class="col-md-2">
+            <label class="form-label">Status</label>
+            <select class="form-select" name="status">
+              <option value="available">available</option>
+              <option value="booked">booked</option>
+              <option value="maintenance">maintenance</option>
+            </select>
+          </div>
+          <div class="col-md-2 d-flex align-items-end">
+            <button class="btn btn-primary w-100" type="submit">Simpan</button>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <div class="card p-3 mb-5">
+      <div class="table-responsive">
+        <table class="table table-hover align-middle">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nomor Kamar</th>
+              <th>Lantai</th>
+              <th>Tipe</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="roomTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="section-title">3. Data Tamu</div>
+    <div class="card p-3 mb-4">
+      <form id="guestForm">
+        <div class="row g-3">
+          <div class="col-md-3">
+            <label class="form-label">Email</label>
+            <input type="email" class="form-control" name="email" required />
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">Password</label>
+            <input type="password" class="form-control" name="password" required />
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">Nama Tamu</label>
+            <input type="text" class="form-control" name="nama_tamu" required />
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">No Telepon</label>
+            <input type="text" class="form-control" name="no_telepon" required />
+          </div>
+        </div>
+        <div class="mt-3">
+          <button class="btn btn-primary" type="submit">Simpan</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="card p-3 mb-5">
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nama</th>
+            <th>Email</th>
+            <th>No. Telepon</th>
+          </tr>
+        </thead>
+        <tbody id="guestTableBody"></tbody>
+      </table>
+    </div>
+
+    <div class="section-title">4. Reservasi Offline</div>
+    <div class="card p-3 mb-4">
+      <form id="offlineBookingForm">
+        <div class="row g-3">
+          <div class="col-md-3">
+            <label class="form-label">Nama Pelanggan</label>
+            <input type="text" class="form-control" name="nama_pelanggan" required />
+          </div>
+          <div class="col-md-2">
+            <label class="form-label">No Telepon</label>
+            <input type="text" class="form-control" name="nomor_telepon" required />
+          </div>
+          <div class="col-md-2">
+            <label class="form-label">Tanggal Reservasi</label>
+            <input type="date" class="form-control" name="tanggal_reservasi" required />
+          </div>
+          <div class="col-md-2">
+            <label class="form-label">Jam Reservasi</label>
+            <input type="time" class="form-control" name="jam_reservasi" required />
+          </div>
+          <div class="col-md-1">
+            <label class="form-label">Jumlah Orang</label>
+            <input type="number" class="form-control" name="jumlah_orang" min="1" required />
+          </div>
+          <div class="col-md-2">
+            <label class="form-label">Total Biaya</label>
+            <input type="number" class="form-control" name="total_biaya" step="0.01" required />
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">Status Pembayaran</label>
+            <select class="form-select" name="status_pembayaran">
+              <option value="Belum Terbayar">Belum Terbayar</option>
+              <option value="Sudah Terbayar">Sudah Terbayar</option>
+              <option value="DP (Down Payment)">DP (Down Payment)</option>
+            </select>
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">Metode Pembayaran</label>
+            <input type="text" class="form-control" name="metode_pembayaran" />
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">Catatan</label>
+            <input type="text" class="form-control" name="catatan" />
+          </div>
+          <div class="col-md-2 d-flex align-items-end">
+            <button class="btn btn-primary w-100" type="submit">Simpan</button>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <div class="card p-3 mb-5">
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nama</th>
+            <th>No. Telepon</th>
+            <th>Jadwal</th>
+            <th>Total</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="offlineBookingTableBody"></tbody>
+      </table>
+    </div>
+
+    <div class="section-title">5. Feedback</div>
+    <div class="card p-3 mb-4">
+      <form id="feedbackForm">
+        <div class="row g-3">
+          <div class="col-md-3">
+            <label class="form-label">Nama</label>
+            <input type="text" class="form-control" name="nama" required />
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">Email</label>
+            <input type="email" class="form-control" name="email" required />
+          </div>
+          <div class="col-md-2">
+            <label class="form-label">Rating</label>
+            <input type="number" class="form-control" name="rating" min="1" max="5" required />
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">Pesan</label>
+            <input type="text" class="form-control" name="pesan" required />
+          </div>
+          <div class="col-md-12">
+            <button class="btn btn-primary" type="submit">Simpan</button>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <div class="card p-3 mb-5">
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nama</th>
+            <th>Email</th>
+            <th>Rating</th>
+            <th>Pesan</th>
+          </tr>
+        </thead>
+        <tbody id="feedbackTableBody"></tbody>
+      </table>
+    </div>
+
+    <div class="section-title">6. Data Tipe Kamar</div>
+    <div class="card p-3 mb-4">
+      <form id="roomTypeForm">
+        <div class="row g-3">
+          <div class="col-md-3">
+            <label class="form-label">Nama Tipe</label>
+            <input type="text" class="form-control" name="nama_tipe" required />
+          </div>
+          <div class="col-md-2">
+            <label class="form-label">Harga / Malam</label>
+            <input type="number" class="form-control" name="harga_per_malam" step="0.01" required />
+          </div>
+          <div class="col-md-2">
+            <label class="form-label">Kapasitas</label>
+            <input type="number" class="form-control" name="kapasitas" min="1" required />
+          </div>
+          <div class="col-md-5">
+            <label class="form-label">Deskripsi</label>
+            <input type="text" class="form-control" name="deskripsi" />
+          </div>
+          <div class="col-md-12">
+            <button class="btn btn-primary" type="submit">Simpan</button>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <div class="card p-3 mb-5">
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nama Tipe</th>
+            <th>Harga / Malam</th>
+            <th>Kapasitas</th>
+            <th>Deskripsi</th>
+          </tr>
+        </thead>
+        <tbody id="roomTypeTableBody"></tbody>
+      </table>
+    </div>
+
+    <div class="section-title">7. Data Resepsionis</div>
+    <div class="card p-3 mb-4">
+      <form id="receptionistForm">
+        <div class="row g-3">
+          <div class="col-md-4">
+            <label class="form-label">Username</label>
+            <input type="text" class="form-control" name="username" required />
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">Password</label>
+            <input type="password" class="form-control" name="password" required />
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">Nama Lengkap</label>
+            <input type="text" class="form-control" name="nama_lengkap" required />
+          </div>
+          <div class="col-md-12">
+            <button class="btn btn-primary" type="submit">Simpan</button>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <div class="card p-3 mb-5">
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Username</th>
+            <th>Nama Lengkap</th>
+          </tr>
+        </thead>
+        <tbody id="receptionistTableBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    const bookings = [
+      { id: 1, nama_pelanggan: "Rina Wijaya", layanan: "Deluxe Room", tanggal_booking: "2026-10-28", jumlah_tamu: 2, status_pembayaran: "Sudah Terbayar" },
+      { id: 2, nama_pelanggan: "Andi Pratama", layanan: "Family Room", tanggal_booking: "2026-10-29", jumlah_tamu: 4, status_pembayaran: "Belum Terbayar" }
+    ];
+
+    const rooms = [
+      { id: 1, room_number: "101", lantai: 1, room_type: "Standard", status: "available" },
+      { id: 2, room_number: "205", lantai: 2, room_type: "Deluxe", status: "booked" },
+      { id: 3, room_number: "301", lantai: 3, room_type: "Suite", status: "maintenance" }
+    ];
+
+    const guests = [
+      { id: 1, email: "guest1@mail.com", nama_tamu: "Siti Aminah", no_telepon: "081234567890" },
+      { id: 2, email: "guest2@mail.com", nama_tamu: "Budi Santoso", no_telepon: "082345678901" }
+    ];
+
+    const offlineBookings = [
+      { id: 1, nama_pelanggan: "Dewi Lestari", nomor_telepon: "089876543210", tanggal_reservasi: "2026-10-27", jam_reservasi: "14:00", jumlah_orang: 2, total_biaya: 750000, status_pembayaran: "Sudah Terbayar" }
+    ];
+
+    const feedbacks = [
+      { id: 1, nama: "Zahra", email: "zahra@mail.com", rating: 5, pesan: "Pelayanan sangat ramah dan kamar bersih." }
+    ];
+
+    const roomTypes = [
+      { id_tipe: 1, nama_tipe: "Standard", harga_per_malam: 350000, kapasitas: 2, deskripsi: "Kamar nyaman untuk 2 orang" },
+      { id_tipe: 2, nama_tipe: "Deluxe", harga_per_malam: 500000, kapasitas: 3, deskripsi: "Kamar luas dengan pemandangan" }
+    ];
+
+    const receptionist = [
+      { id: 1, username: "admin", nama_lengkap: "Admin Hotel" }
+    ];
+
+    function renderSummary() {
+      document.getElementById("totalBooking").textContent = bookings.length;
+      document.getElementById("totalRoom").textContent = rooms.length;
+      document.getElementById("totalGuest").textContent = guests.length;
+      document.getElementById("totalFeedback").textContent = feedbacks.length;
+    }
+
+    function statusBadge(status) {
+      if (status === "Sudah Terbayar") {
+        return '<span class="badge-custom status-paid">Sudah Terbayar</span>';
+      } else if (status === "Belum Terbayar") {
+        return '<span class="badge-custom status-unpaid">Belum Terbayar</span>';
+      } else if (status === "available") {
+        return '<span class="badge-custom status-available">Available</span>';
+      } else if (status === "booked") {
+        return '<span class="badge-custom status-booked">Booked</span>';
+      } else if (status === "maintenance") {
+        return '<span class="badge-custom status-maintenance">Maintenance</span>';
+      } else {
+        return '<span class="badge-custom status-unpaid">' + status + '</span>';
+      }
+    }
+
+    function renderBookings() {
+      const tbody = document.getElementById("bookingTableBody");
+      tbody.innerHTML = bookings.map(item => `
+        <tr>
+          <td>${item.id}</td>
+          <td>${item.nama_pelanggan}</td>
+          <td>${item.layanan}</td>
+          <td>${item.tanggal_booking}</td>
+          <td>${item.jumlah_tamu}</td>
+          <td>${statusBadge(item.status_pembayaran)}</td>
+        </tr>
+      `).join("");
+    }
+
+    function renderRooms() {
+      const tbody = document.getElementById("roomTableBody");
+      tbody.innerHTML = rooms.map(item => `
+        <tr>
+          <td>${item.id}</td>
+          <td>${item.room_number}</td>
+          <td>${item.lantai}</td>
+          <td>${item.room_type}</td>
+          <td>${statusBadge(item.status)}</td>
+        </tr>
+      `).join("");
+    }
+
+    function renderGuests() {
+      const tbody = document.getElementById("guestTableBody");
+      tbody.innerHTML = guests.map(item => `
+        <tr>
+          <td>${item.id}</td>
+          <td>${item.nama_tamu}</td>
+          <td>${item.email}</td>
+          <td>${item.no_telepon}</td>
+        </tr>
+      `).join("");
+    }
+
+    function renderOfflineBookings() {
+      const tbody = document.getElementById("offlineBookingTableBody");
+      tbody.innerHTML = offlineBookings.map(item => `
+        <tr>
+          <td>${item.id}</td>
+          <td>${item.nama_pelanggan}</td>
+          <td>${item.nomor_telepon}</td>
+          <td>${item.tanggal_reservasi} ${item.jam_reservasi}</td>
+          <td>Rp ${Number(item.total_biaya).toLocaleString("id-ID")}</td>
+          <td>${statusBadge(item.status_pembayaran)}</td>
+        </tr>
+      `).join("");
+    }
+
+    function renderFeedbacks() {
+      const tbody = document.getElementById("feedbackTableBody");
+      tbody.innerHTML = feedbacks.map(item => `
+        <tr>
+          <td>${item.id}</td>
+          <td>${item.nama}</td>
+          <td>${item.email}</td>
+          <td>${"⭐".repeat(item.rating)}</td>
+          <td>${item.pesan}</td>
+        </tr>
+      `).join("");
+    }
+
+    function renderRoomTypes() {
+      const tbody = document.getElementById("roomTypeTableBody");
+      tbody.innerHTML = roomTypes.map(item => `
+        <tr>
+          <td>${item.id_tipe}</td>
+          <td>${item.nama_tipe}</td>
+          <td>Rp ${Number(item.harga_per_malam).toLocaleString("id-ID")}</td>
+          <td>${item.kapasitas}</td>
+          <td>${item.deskripsi}</td>
+        </tr>
+      `).join("");
+    }
+
+    function renderReceptionist() {
+      const tbody = document.getElementById("receptionistTableBody");
+      tbody.innerHTML = receptionist.map(item => `
+        <tr>
+          <td>${item.id}</td>
+          <td>${item.username}</td>
+          <td>${item.nama_lengkap}</td>
+        </tr>
+      `).join("");
+    }
+
+    document.getElementById("bookingForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const formData = new FormData(this);
+      const newItem = {
+        id: bookings.length + 1,
+        nama_pelanggan: formData.get("nama_pelanggan"),
+        layanan: formData.get("layanan"),
+        tanggal_booking: formData.get("tanggal_booking"),
+        jumlah_tamu: Number(formData.get("jumlah_tamu")),
+        status_pembayaran: formData.get("status_pembayaran")
+      };
+      bookings.push(newItem);
+      this.reset();
+      renderBookings();
+      renderSummary();
+    });
+
+    document.getElementById("roomForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const formData = new FormData(this);
+      const newItem = {
+        id: rooms.length + 1,
+        room_number: formData.get("room_number"),
+        lantai: Number(formData.get("lantai")),
+        room_type: formData.get("room_type"),
+        status: formData.get("status")
+      };
+      rooms.push(newItem);
+      this.reset();
+      renderRooms();
+      renderSummary();
+    });
+
+    document.getElementById("guestForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const formData = new FormData(this);
+      const newItem = {
+        id: guests.length + 1,
+        email: formData.get("email"),
+        password: formData.get("password"),
+        nama_tamu: formData.get("nama_tamu"),
+        no_telepon: formData.get("no_telepon")
+      };
+      guests.push(newItem);
+      this.reset();
+      renderGuests();
+      renderSummary();
+    });
+
+    document.getElementById("offlineBookingForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const formData = new FormData(this);
+      const newItem = {
+        id: offlineBookings.length + 1,
+        nama_pelanggan: formData.get("nama_pelanggan"),
+        nomor_telepon: formData.get("nomor_telepon"),
+        tanggal_reservasi: formData.get("tanggal_reservasi"),
+        jam_reservasi: formData.get("jam_reservasi"),
+        jumlah_orang: Number(formData.get("jumlah_orang")),
+        total_biaya: Number(formData.get("total_biaya")),
+        status_pembayaran: formData.get("status_pembayaran")
+      };
+      offlineBookings.push(newItem);
+      this.reset();
+      renderOfflineBookings();
+    });
+
+    document.getElementById("feedbackForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const formData = new FormData(this);
+      const newItem = {
+        id: feedbacks.length + 1,
+        nama: formData.get("nama"),
+        email: formData.get("email"),
+        rating: Number(formData.get("rating")),
+        pesan: formData.get("pesan")
+      };
+      feedbacks.push(newItem);
+      this.reset();
+      renderFeedbacks();
+      renderSummary();
+    });
+
+    document.getElementById("roomTypeForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const formData = new FormData(this);
+      const newItem = {
+        id_tipe: roomTypes.length + 1,
+        nama_tipe: formData.get("nama_tipe"),
+        harga_per_malam: Number(formData.get("harga_per_malam")),
+        kapasitas: Number(formData.get("kapasitas")),
+        deskripsi: formData.get("deskripsi")
+      };
+      roomTypes.push(newItem);
+      this.reset();
+      renderRoomTypes();
+    });
+
+    document.getElementById("receptionistForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const formData = new FormData(this);
+      const newItem = {
+        id: receptionist.length + 1,
+        username: formData.get("username"),
+        password: formData.get("password"),
+        nama_lengkap: formData.get("nama_lengkap")
+      };
+      receptionist.push(newItem);
+      this.reset();
+      renderReceptionist();
+    });
+
+    renderSummary();
+    renderBookings();
+    renderRooms();
+    renderGuests();
+    renderOfflineBookings();
+    renderFeedbacks();
+    renderRoomTypes();
+    renderReceptionist();
+  </script>
+</body>
+</html>
